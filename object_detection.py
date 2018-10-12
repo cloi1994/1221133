@@ -137,6 +137,8 @@ def runDectection():
                 stream.seek(0)
                 frame = Image.open(stream)
 
+                print "111111"
+
                 frame.save("target.jpg", "JPEG", quality=80, optimize=True, progressive=True)
 
                 detection_classes,detection_scores = run_inference_for_single_image(frame, detection_graph)
