@@ -5,13 +5,11 @@ import sys
 import tensorflow as tf
 
 from picamera import PiCamera
-
+from io import BytesIO
 import time
 from collections import defaultdict
-from io import StringIO
 from PIL import Image
 import boto3
-import cStringIO
 import base64
 import smtplib
 from email.mime.multipart import MIMEMultipart
@@ -166,7 +164,7 @@ def runDectection():
                     	                     )
                                 for match in response['FaceMatches']:
 
-                                    if match['Similarity'] < 0.9:
+                                    if match['Similarity'] > 0.9:
                                         sendOperation(cur_time,cur_time_sec)
                                         break
                                     else:
