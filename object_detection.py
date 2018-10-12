@@ -106,10 +106,10 @@ def updateToFirebase(frame,cur_time,cur_time_sec):
 
 
 def sendOperation(cur_time,cur_time_sec):
-    with open('target.jpg') as image_file:
-        sendEmail(image_file.read(),cur_time)
-        updateToFirebase(image_file.read(),cur_time,cur_time_sec)
-        time.sleep(2)
+    image = Image.open('target.jpg')
+    sendEmail(image_file.read(),cur_time)
+    updateToFirebase(image_file.read(),cur_time,cur_time_sec)
+    time.sleep(2)
 
 def contains_faces(target_64,rekognition):
     response = rekognition.detect_faces(
