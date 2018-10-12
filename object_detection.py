@@ -35,7 +35,7 @@ storage = firebase.storage()
 
 database = firebase.database()
 
-stream = BytesIO()
+stream = StringIO()
 camera = PiCamera()
 
 
@@ -107,9 +107,9 @@ def updateToFirebase(cur_time,cur_time_sec):
 
 def sendOperation(cur_time,cur_time_sec):
     with Image.open('target.jpg') as frame:
-        memf = StringIO()
+        memf = BytesIO()
         frame.save(memf, "JPEG")
-        sendEmail(memf.getvalue(),cur_time)
+        sendEmail(memf.read(),cur_time)
         updateToFirebase(cur_time,cur_time_sec)
         time.sleep(2)
 
