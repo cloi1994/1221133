@@ -107,8 +107,8 @@ def updateToFirebase(frame,cur_time,cur_time_sec):
 
 def sendOperation(cur_time,cur_time_sec):
     image = Image.open('target.jpg')
-    sendEmail(image_file.read(),cur_time)
-    updateToFirebase(image_file.read(),cur_time,cur_time_sec)
+    sendEmail(image,cur_time)
+    updateToFirebase(image,cur_time,cur_time_sec)
     time.sleep(2)
 
 def contains_faces(target_64,rekognition):
@@ -137,7 +137,7 @@ def runDectection():
                 stream.seek(0)
                 frame = Image.open(stream)
 
-                print "111111"
+                print ("new frame")
 
                 frame.save("target.jpg", "JPEG", quality=80, optimize=True, progressive=True)
                 stream.seek(0)
@@ -166,7 +166,7 @@ def runDectection():
                                 for match in response['FaceMatches']:
 
                                     if match['Similarity'] > 0.9:
-                                        print ('222')
+                                        print ('detect')
                                         sendOperation(cur_time,cur_time_sec)
                                         break
                                     else:
