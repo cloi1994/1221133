@@ -122,8 +122,6 @@ def contains_faces(target_64,rekognition):
 
 def runDectection():
 
-    cap = cv2.VideoCapture(0)
-
     BUCKET = "amazon-rekognition"
 
     master_64 = ""
@@ -139,7 +137,7 @@ def runDectection():
                 stream.seek(0)
                 frame = Image.open(stream)
 
-                camera.capture('target.jpg')
+                frame.save("target.jpg", "JPEG", quality=80, optimize=True, progressive=True)
 
                 detection_classes,detection_scores = run_inference_for_single_image(frame, detection_graph)
                 for index,value in enumerate(detection_classes):
