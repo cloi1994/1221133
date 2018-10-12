@@ -5,7 +5,7 @@ import sys
 import tensorflow as tf
 
 from picamera import PiCamera
-from io import BytesIO
+from io import BytesIO,StringIO
 import time
 from collections import defaultdict
 from PIL import Image
@@ -35,7 +35,7 @@ storage = firebase.storage()
 
 database = firebase.database()
 
-stream = BytesIO()
+stream = StringIO()
 camera = PiCamera()
 
 
