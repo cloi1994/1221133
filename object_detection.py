@@ -85,7 +85,7 @@ def sendEmail(frame,cur_time):
     msg['Subject'] = "Door Alert" + ' ' + cur_time
     body = 'Someone appears at your door'
     msg.attach(MIMEText(body, 'plain'))
-    img = MIMEImage(frame)
+    img = MIMEImage(frame.getvalue())
     msg.attach(img)
     text = msg.as_string()
     server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -94,7 +94,7 @@ def sendEmail(frame,cur_time):
     server.sendmail(sender_mail, sender_mail, text)
     server.quit()
 
-def updateToFirebase(frame,cur_time,cur_time_sec):
+def updateToFirebase(cur_time,cur_time_sec):
 
     storage.child("images/" + cur_time + ".jpg").put("target.jpg")
 
@@ -105,11 +105,10 @@ def updateToFirebase(frame,cur_time,cur_time_sec):
     database.child("events").push(data)
 
 
-def sendOperation(cur_time,cur_time_sec):
-    with Image.open('target.jpg') as image:
-        sendEmail(image,cur_time)
-        updateToFirebase(image,cur_time,cur_time_sec)
-        time.sleep(2)
+def sendOperation(cur_time,cur_time_sec,frame):
+    sendEmail(frame,cur_time)
+    updateToFirebase(cur_time,cur_time_sec)
+    time.sleep(2)
 
 def contains_faces(target_64,rekognition):
     response = rekognition.detect_faces(
@@ -138,8 +137,7 @@ def runDectection():
                 frame = Image.open(stream)
 
                 print ("new frame")
-
-                frame.save("target.jpg")
+                frame.save('target.jpg')
                 stream.seek(0)
                 stream.truncate()
 
@@ -167,7 +165,7 @@ def runDectection():
 
                                     if match['Similarity'] > 0.9:
                                         print ('detect')
-                                        sendOperation(cur_time,cur_time_sec)
+                                        sendOperation(cur_time,cur_time_sec,frame)
                                         break
                                     else:
                                         print ('match')
