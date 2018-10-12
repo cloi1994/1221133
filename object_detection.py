@@ -35,7 +35,7 @@ storage = firebase.storage()
 
 database = firebase.database()
 
-stream = StringIO()
+stream = BytesIO()
 camera = PiCamera()
 
 
@@ -85,7 +85,7 @@ def sendEmail(frame,cur_time):
     msg['Subject'] = "Door Alert" + ' ' + cur_time
     body = 'Someone appears at your door'
     msg.attach(MIMEText(body, 'plain'))
-    img = MIMEImage(frame.getvalue())
+    img = MIMEImage(frame)
     msg.attach(img)
     text = msg.as_string()
     server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -105,10 +105,13 @@ def updateToFirebase(cur_time,cur_time_sec):
     database.child("events").push(data)
 
 
-def sendOperation(cur_time,cur_time_sec,frame):
-    sendEmail(frame,cur_time)
-    updateToFirebase(cur_time,cur_time_sec)
-    time.sleep(2)
+def sendOperation(cur_time,cur_time_sec):
+    with Image.open('target.jpg') as frame:
+        memf = StringIO()
+        frame.save(memf, "JPEG")
+        sendEmail(memf.getvalue(),cur_time)
+        updateToFirebase(cur_time,cur_time_sec)
+        time.sleep(2)
 
 def contains_faces(target_64,rekognition):
     response = rekognition.detect_faces(
@@ -165,7 +168,7 @@ def runDectection():
 
                                     if match['Similarity'] > 0.9:
                                         print ('detect')
-                                        sendOperation(cur_time,cur_time_sec,frame)
+                                        sendOperation(cur_time,cur_time_sec)
                                         break
                                     else:
                                         print ('match')
