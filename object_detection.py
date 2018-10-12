@@ -106,7 +106,7 @@ def updateToFirebase(frame,cur_time,cur_time_sec):
 
 
 def sendOperation(cur_time,cur_time_sec):
-    with Image.open('target.png') as image:
+    with Image.open('target.jpg') as image:
         sendEmail(image,cur_time)
         updateToFirebase(image,cur_time,cur_time_sec)
         time.sleep(2)
@@ -133,13 +133,13 @@ def runDectection():
         while(True):
 
             try:
-                camera.capture(stream, format='png')
+                camera.capture(stream, format='jpeg')
                 stream.seek(0)
                 frame = Image.open(stream)
 
                 print ("new frame")
 
-                frame.save("target.png", "png")
+                frame.save("target.jpg")
                 stream.seek(0)
                 stream.truncate()
 
