@@ -140,11 +140,11 @@ def runDectection():
                 stream.seek(0)
                 frame = Image.open(stream)
 
+                camera.capture('target.jpg')
+
                 detection_classes,detection_scores = run_inference_for_single_image(frame, detection_graph)
                 for index,value in enumerate(detection_classes):
                     if detection_scores[index] > 0.7 and value == 1:
-
-                        cv2.imwrite('target.jpg',frame)
 
                         cur_time = time.strftime("%a, %d %b %Y %I:%M:%S %p %Z", time.localtime())
                         cur_time_sec = time.time()
@@ -165,6 +165,7 @@ def runDectection():
                                 for match in response['FaceMatches']:
 
                                     if match['Similarity'] > 0.9:
+                                        print ('222')
                                         sendOperation(cur_time,cur_time_sec)
                                         break
                                     else:
